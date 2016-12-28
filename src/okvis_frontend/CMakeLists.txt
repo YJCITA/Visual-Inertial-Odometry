@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 2.8.11)
-project(okvis_frontend)
 
 if(NOT DO_TIMING)
   add_definitions(-DDEACTIVATE_TIMERS)
@@ -7,11 +6,12 @@ if(NOT DO_TIMING)
 endif()    
 
 # require Eigen
-find_package( Eigen REQUIRED )
-include_directories(${EIGEN_INCLUDE_DIR}) 
+#find_package( Eigen REQUIRED )
+#include_directories(${EIGEN_INCLUDE_DIR}) 
+
 
 # build the library
-add_library(${PROJECT_NAME} 
+add_library(okvis_frontend 
   src/Frontend.cpp
   src/VioKeyframeWindowMatchingAlgorithm.cpp
   src/stereo_triangulation.cpp
@@ -26,10 +26,11 @@ add_library(${PROJECT_NAME}
   include/opengv/relative_pose/FrameRelativeAdapter.hpp
   include/opengv/sac_problems/absolute_pose/FrameAbsolutePoseSacProblem.hpp
   include/opengv/sac_problems/relative_pose/FrameRelativePoseSacProblem.hpp
-  include/opengv/sac_problems/relative_pose/FrameRotationOnlySacProblem.hpp)
+  include/opengv/sac_problems/relative_pose/FrameRotationOnlySacProblem.hpp
+)
 
 # and link it                 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(okvis_frontend 
   PRIVATE ${BRISK_LIBRARIES} 
   PRIVATE ${OpenGV_LIBRARIES} 
   PRIVATE ${CERES_LIBRARIES}
@@ -38,10 +39,3 @@ target_link_libraries(${PROJECT_NAME}
   PUBLIC okvis_ceres 
   PUBLIC okvis_timing 
   PUBLIC okvis_matcher)
-
-# installation if required
-install(TARGETS ${PROJECT_NAME}
-  EXPORT okvisTargets 
-  ARCHIVE DESTINATION "${INSTALL_LIB_DIR}" COMPONENT lib
-)
-install(DIRECTORY include/ DESTINATION ${INSTALL_INCLUDE_DIR} COMPONENT dev FILES_MATCHING PATTERN "*.hpp")
